@@ -10,7 +10,7 @@ env:
   # --- ----------------------------------------------------- --- #
   PROJECT_ID: "dnd-helper-477914" # <-- Paste your Project ID here
   GAR_REGION: "europe-central2" # <-- e.g., europe-west1
-  GAR_REPO_NAME: "dnd-helper-477914" # <-- The name you gave your Artifact Registry
+  GAR_REPO_NAME: "dnd-helper" # <-- The name you gave your Artifact Registry
   SERVICE_NAME: "angular-dnd-helper" # <-- A name for your new Cloud Run service
 
 jobs:
