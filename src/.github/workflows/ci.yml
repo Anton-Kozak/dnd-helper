@@ -1,0 +1,76 @@
+name: Build and Deploy to Google Cloud Run
+
+on:
+  push:
+    branches: [ "main" ]
+
+env:
+  # --- ----------------------------------------------------- --- #
+  # --- PLEASE UPDATE THESE 4 VALUES WITH YOUR PROJECT INFO --- #
+  # --- ----------------------------------------------------- --- #
+  PROJECT_ID: "dnd-helper-477914" # <-- Paste your Project ID here
+  GAR_REGION: "europe-west1" # <-- e.g., europe-west1
+  GAR_REPO_NAME: "ci-cd-repo" # <-- The name you gave your Artifact Registry
+  SERVICE_NAME: "angular-showcase-service" # <-- A name for your new Cloud Run service
+
+jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Run unit tests
+        run: npm run test:ci
+
+  deploy:
+    name: Deploy to Cloud Run
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}'
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker ${{ env.GAR_REGION }}-docker.pkg.dev
+
+      - name: Define Image Tag
+        run: echo "IMAGE_PATH=${{ env.GAR_REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.GAR_REPO_NAME }}/${{ env.SERVICE_NAME }}:${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ env.IMAGE_PATH }} .
+          docker push ${{ env.IMAGE_PATH }}
+
+      - name: Deploy to Google Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE_NAME }}
+          region: ${{ env.GAR_REGION }}
+          image: ${{ env.IMAGE_PATH }}
+          flags: '--allow-unauthenticated'
+
+      - name: Show Service URL
+        run: |
+          echo "Service deployed to: ${{ steps.deploy.outputs.url }}"
