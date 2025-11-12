@@ -1,1 +1,12 @@
-<p>5e-place works!</p>,
+<div class="container">
+  <form [formGroup]="monsterFormGroup">
+    <label for="monster-name">Enter monster</label>
+    <input formControlName="monsterName" id="monster-name" />
+
+    @if (monsterData) {
+      <div class="mosnter-data">
+        <span>{{ monsterData }}</span>
+      </div>
+    }
+  </form>
+</div>
