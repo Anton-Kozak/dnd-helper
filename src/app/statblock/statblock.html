@@ -1,0 +1,115 @@
+<!-- <mat-card class="example-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ statBlock.name }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>{{ statBlock.name }}</p>
+  </mat-card-content>
+  <mat-card-footer class="example-card-footer">
+    <mat-chip-set aria-label="Chihuahua traits">
+      @for (actionTag of actionTags; track $index) {
+        <mat-chip>{{ actionTag }}</mat-chip>
+      }
+    </mat-chip-set>
+  </mat-card-footer>
+</mat-card> -->
+
+<!-- custom statblock template -->
+@if (statBlock.name) {
+  <div class="stat-block">
+    <div class="stat-block__title"></div>
+    <div class="stat-block__body">
+      <div class="stat-block__body-subtitle">
+        <span class="stat-block__body-subtitle--text"
+          >Size: {{ statBlock.size }}</span
+        >
+        <span class="stat-block__body-subtitle--text"
+          >Type: {{ statBlock.type }}</span
+        >
+        <span class="stat-block__body-subtitle--text">Alignment: N/A</span>
+      </div>
+      <!-- this should be grid -->
+      <div class="stat-block__body-values">
+        <span class="stat-block__body-values--text"
+          >AC: {{ statBlock.ac }}</span
+        >
+        <span class="stat-block__body-values--text"
+          >HP: {{ statBlock.hp }}</span
+        >
+        <span class="stat-block__body-values--text"
+          >Speed: {{ statBlock.speed }}</span
+        >
+        <span class="stat-block__body-values--text">Initiative: N/A</span>
+      </div>
+      <!-- this should be grid -->
+      <div class="stat-block__body-stats">
+        <div class="stat-block__body-stats--stat-line">
+          <span>Str</span> <span>{{ statBlock.stats.str }}</span>
+          <span>Mod: {{ statBlock.stats.str | modificatorBonus }}</span>
+          <span>Save: {{ statBlock.save.str }}</span>
+        </div>
+        <div class="stat-block__body-stats--stat-line">
+          <span>Con</span> <span>{{ statBlock.stats.con }}</span>
+          <span>{{ statBlock.stats.con }}</span>
+          <span>{{ statBlock.save.con }}</span>
+        </div>
+        <div class="stat-block__body-stats--stat-line">
+          <span>Dex</span> <span>{{ statBlock.stats.dex }}</span>
+          <span>{{ statBlock.stats.dex | modificatorBonus }}</span>
+          <span>{{ statBlock.save.dex }}</span>
+        </div>
+        <div class="stat-block__body-stats--stat-line">
+          <span>Wis</span> <span>{{ statBlock.stats.wis }}</span>
+          <span>{{ statBlock.stats.wis | modificatorBonus }}</span>
+          <span>{{ statBlock.save.wis }}</span>
+        </div>
+        <div class="stat-block__body-stats--stat-line">
+          <span>Int</span> <span>{{ statBlock.stats.int }}</span>
+          <span>{{ statBlock.stats.int | modificatorBonus }}</span>
+          <span>{{ statBlock.save.int }}</span>
+        </div>
+        <div class="stat-block__body-stats--stat-line">
+          <span>Cha</span> <span>{{ statBlock.stats.cha }}</span>
+          <span>{{ statBlock.stats.cha | modificatorBonus }}</span>
+          <span>{{ statBlock.save.cha }}</span>
+        </div>
+      </div>
+      <div class="stat-block__body-abilities">
+        <div class="stat-blick__body-abilities--text">
+          @if (skills) {
+            <div class="stat-blick__body-abilities--text">
+              Skills: {{ skills.join(", ") }}
+            </div>
+          }
+        </div>
+        @if (resistances) {
+          <div class="stat-blick__body-abilities--text">
+            Resistances: {{ resistances.join(", ") }}
+          </div>
+        }
+        <div class="stat-blick__body-abilities--text">
+          @if (languages) {
+            <div class="stat-blick__body-abilities--text">
+              Languages: {{ languages.join(", ") }}
+            </div>
+          }
+        </div>
+        <div class="stat-blick__body-abilities--text">
+          @if (senses) {
+            <div class="stat-blick__body-abilities--text">
+              Senses: {{ senses.join(", ") }}
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+    <div class="stat-block__features"></div>
+    <div class="stat-block__footer">
+      <mat-chip-set aria-label="Chihuahua traits">
+        @for (actionTag of actionTags; track $index) {
+          <mat-chip>{{ actionTag }}</mat-chip>
+        }
+      </mat-chip-set>
+    </div>
+  </div>
+}

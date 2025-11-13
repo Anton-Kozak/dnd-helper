@@ -1,0 +1,14 @@
+<mat-autocomplete #auto="matAutocomplete">
+  @for (result of searchResults(); track result) {
+    <mat-option [value]="result.name" (click)="selectStatblock(result)">{{ result.name }}</mat-option>
+  }
+</mat-autocomplete>
+
+<input
+  type="text"
+  placeholder="Search for a statblock"
+  aria-label="text"
+  matInput
+  [formControl]="myControl"
+  [matAutocomplete]="auto"
+/>
