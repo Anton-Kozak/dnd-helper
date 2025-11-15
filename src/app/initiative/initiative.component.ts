@@ -5,6 +5,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { InitiativeService } from '../services/initiative.service';
+import { CombatantCacheService } from '../services/combatant-cache.service';
+import { IStatBlock } from 'src/model/interfaces/statblock.interface';
+import { StatblockService } from '../services/stat-block.service';
 
 @Component({
   selector: 'app-initiative',
@@ -21,6 +24,10 @@ import { InitiativeService } from '../services/initiative.service';
 })
 export class InitiativeComponent {
   private initiativeService = inject(InitiativeService);
+  private combatantCacheService = inject(CombatantCacheService);
+  private statblockService = inject(StatblockService);
+
+  isCombatActive = false;
 
   combatants$ = this.initiativeService.activeCombatants$;
 
@@ -28,8 +35,18 @@ export class InitiativeComponent {
     event.stopPropagation();
   }
 
-  setActive(id: string) {
+  private getCachedStatblock(name: string): IStatBlock | undefined {
+    return this.combatantCacheService
+      .cachedStatblocks$()
+      .find((cc) => cc.name === name);
+  }
+
+  setActive(id: string, name: string) {
     this.initiativeService.updateActiveStatus(id);
+    const cachedStatblock = this.getCachedStatblock(name);
+    if (cachedStatblock) {
+      this.statblockService.setSelectedStatBlock(cachedStatblock);
+    }
   }
 
   onDamage(id: string, currentHp: number, event: Event): void {

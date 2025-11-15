@@ -1,19 +1,18 @@
-@if (combatants$().length) {
-  <mat-card
-    class="initiative-tracker bg-gray-900 text-gray-200 rounded-lg shadow-xl max-w-2xl mx-auto font-sans border border-gray-700 p-4"
-  >
-    <h2 class="text-2xl font-bold font-serif italic text-white mb-4 px-2">
-      Initiative Order
-    </h2>
+<mat-card
+  class="initiative-tracker bg-gray-900 text-gray-200 rounded-lg shadow-xl max-w-2xl mx-auto font-sans border border-gray-700 p-4"
+>
+  <h2 class="text-2xl font-bold font-serif italic text-white mb-4 px-2">
+    Initiative Order
+  </h2>
+  @if (combatants$().length) {
     <button (click)="rollInitiative()">Roll initiative</button>
-
     <mat-list role="list" [disableRipple]="true">
       @for (combatant of combatants$(); track combatant.id) {
         <mat-list-item
           role="listitem"
           class="combatant-row mb-2 rounded-lg bg-gray-800 border border-gray-700 shadow-sm"
           [class.active-turn]="combatant.isActive"
-          (click)="setActive(combatant.id)"
+          (click)="setActive(combatant.id, combatant.name)"
         >
           <div class="flex justify-between items-center w-full h-full p-3">
             <div class="flex items-center gap-4 md:gap-6 text-sm md:text-base">
@@ -25,7 +24,7 @@
 
               <div class="flex-shrink-0 w-32 md:w-48">
                 <span class="font-semibold text-gray-100 truncate">{{
-                  combatant.name
+                  combatant.displayName
                 }}</span>
               </div>
 
@@ -76,8 +75,13 @@
         </mat-list-item>
       }
     </mat-list>
+  } @else {
+    <span class="text-center">Please add combatants to initiative</span>
+  }
 
+  @if (combatants$().length) {
     <button
+      [disabled]="isCombatActive"
       mat-flat-button
       color="primary"
       class="w-full mt-4"
@@ -86,5 +90,5 @@
       Next Turn
       <mat-icon class="ml-2">arrow_forward</mat-icon>
     </button>
-  </mat-card>
-}
+  }
+</mat-card>

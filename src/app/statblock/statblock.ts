@@ -13,6 +13,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { KeyValuePipe } from '@angular/common';
 import { InitiativeService } from '../services/initiative.service';
 import { mapStatblockToCombatant } from 'src/util/statBlockMapper.util';
+import { CombatantCacheService } from '../services/combatant-cache.service';
 
 @Component({
   selector: 'app-statblock',
@@ -30,6 +31,7 @@ import { mapStatblockToCombatant } from 'src/util/statBlockMapper.util';
 export class Statblock implements OnInit {
   private statblockService = inject(StatblockService);
   private initiativeService = inject(InitiativeService);
+  private combatantCacheService = inject(CombatantCacheService);
 
   protected statblockSignal = this.statblockService.selectedStatblock$;
 
@@ -48,10 +50,10 @@ export class Statblock implements OnInit {
   }
 
   addToInit(): void {
-    const combatantFromStatblock = mapStatblockToCombatant(
-      this.statblockSignal(),
-    );
+    const statblock = this.statblockSignal();
+    const combatantFromStatblock = mapStatblockToCombatant(statblock);
 
     this.initiativeService.addNewCombatant(combatantFromStatblock);
+    this.combatantCacheService.addToCachedStatblocks(statblock);
   }
 }

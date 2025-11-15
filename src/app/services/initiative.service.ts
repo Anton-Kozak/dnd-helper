@@ -32,9 +32,15 @@ export class InitiativeService {
   }
 
   addNewCombatant(combatant: Combatant): void {
+    let combatantToAdd = combatant;
+    const existingCombatants = this.combatantsSignal().filter((c) => c.name === combatant.name);
+    if (existingCombatants.length) {
+      combatantToAdd = { ...combatant, displayName: `${combatant.displayName}_${existingCombatants.length}` };
+    }
+
     this.combatantsSignal.update((currentCombatants) => [
       ...currentCombatants,
-      combatant,
+      combatantToAdd,
     ]);
   }
 

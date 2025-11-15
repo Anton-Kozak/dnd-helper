@@ -1,5 +1,5 @@
 import {
-  DamageType,
+  AlignmentFull,
   SizesFull,
   Skill,
   SpeedInfo,
@@ -8,12 +8,13 @@ import {
 
 export interface IStatBlock {
   name: string;
+  displayName: string;
   hp: number;
   ac: number;
   speed: Partial<SpeedInfo>;
   stats: MappedStat[];
-  resistances: DamageType[];
-  immunities: DamageType[];
+  resistances: string[];
+  immunities: string[];
   languages: string[];
   cr: string;
   trait: IBaseAction[];
@@ -25,6 +26,7 @@ export interface IStatBlock {
   size: SizesFull;
   // TODO: hardcode types
   type: string;
+  alignment: AlignmentFull[];
 }
 
 // TODO: add other skills

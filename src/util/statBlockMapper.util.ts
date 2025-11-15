@@ -4,21 +4,18 @@ import {
   MappedStat,
 } from 'src/model/interfaces/statblock.interface';
 import {
+  ALIGNMENT_MAPPER,
+  AlignmentAbbr,
+  DamageType,
   SaveThrows,
-  SizeMapper,
+  SIZE_MAPPER,
   SizesAbbr,
   Stat,
   Stats,
 } from 'src/model/types/statblock.type';
 
-export const SIZE_MAPPER: SizeMapper = {
-  T: 'Tiny',
-  M: 'Medium',
-  L: 'Large',
-  H: 'Huge',
-};
-
 export const statblockMapper = (rawStatblockData: any): IStatBlock => {
+  console.log('invoked to map raw to statblock');
   const {
     name,
     str,
@@ -41,6 +38,7 @@ export const statblockMapper = (rawStatblockData: any): IStatBlock => {
     senses,
     size,
     type,
+    alignment,
   } = rawStatblockData;
 
   const AC: number =
@@ -51,15 +49,18 @@ export const statblockMapper = (rawStatblockData: any): IStatBlock => {
   const stats = [
     ...mapStatsIntoSingleObject({ str, dex, con, int, wis, cha }, save),
   ];
+  const resistances = parseDamageResAndImmun(resist);
+  const immunities = parseDamageResAndImmun(immune);
 
   return {
     name,
+    displayName: name,
     hp,
     ac: AC,
     speed,
     stats,
-    resistances: resist,
-    immunities: immune,
+    resistances,
+    immunities,
     languages,
     cr,
     trait,
@@ -69,7 +70,10 @@ export const statblockMapper = (rawStatblockData: any): IStatBlock => {
     skill,
     senses,
     size: SIZE_MAPPER[size as SizesAbbr],
-    type: type.type,
+    type: type.type || type,
+    alignment: alignment.map(
+      (a: AlignmentAbbr) => ALIGNMENT_MAPPER[a as AlignmentAbbr],
+    ),
   };
 };
 
@@ -86,11 +90,40 @@ const mapStatsIntoSingleObject = (
   });
 };
 
+function parseDamageResAndImmun(data: any[]) {
+  if (!data?.length) {
+    return [];
+  }
+
+  const dmg: string[] = [];
+  const uniqueDmg: string[] = [];
+
+  data.forEach((d) => {
+    if (typeof d === 'string') {
+      dmg.push(d);
+    }
+
+    if (typeof d === 'object') {
+      if (d.note) {
+        uniqueDmg.push(`${d.note}: `);
+        d.resist.forEach((ud: DamageType) => {
+          uniqueDmg.push(ud);
+        });
+      }
+      if (d.special) {
+        uniqueDmg.push(d.special);
+      }
+    }
+  });
+  return [...dmg, ...uniqueDmg];
+}
+
 export const mapStatblockToCombatant = (sb: IStatBlock): Combatant => {
   return {
     id: crypto.randomUUID(),
     hp: sb.hp,
     name: sb.name,
+    displayName: sb.displayName,
     currentHp: sb.hp,
     ac: sb.ac,
     isActive: false,

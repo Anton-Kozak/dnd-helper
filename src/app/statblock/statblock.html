@@ -11,7 +11,12 @@
         </h1>
         <!-- Meta (size, type, alignment) -->
         <p class="text-sm text-gray-400 italic">
-          {{ statblockSignal().size }}, {{ statblockSignal().type }}
+          {{ statblockSignal().size }}, {{ statblockSignal().type }},
+          @if (statblockSignal().alignment.length === 1) {
+            {{ statblockSignal().alignment }}
+          } @else {
+            {{ statblockSignal().alignment.join(", ") }}
+          }
         </p>
       </div>
       <!-- CR (Challenge Rating) -->
@@ -78,21 +83,30 @@
       <!-- Skills, Senses, Languages, etc. -->
       <div class="py-4 space-y-1 text-sm text-gray-300">
         @if (statblockSignal().skill) {
-        <p>
-          <span class="font-bold text-white">Skills:</span>
-          {{ skills.join(", ") }}
-        </p>
-      }
+          <p>
+            <span class="font-bold text-white">Skills:</span>
+            {{ skills.join(", ") }}
+          </p>
+        }
         @if (statblockSignal().resistances?.length) {
           <p>
             <span class="font-bold text-white">Damage Resistances:</span>
             {{ statblockSignal().resistances.join(", ") }}
           </p>
         }
-        <p>
-          <span class="font-bold text-white">Senses:</span>
-          {{ statblockSignal().senses }}
-        </p>
+        @if (statblockSignal().immunities?.length) {
+          <p>
+            <span class="font-bold text-white">Damage Immunities:</span>
+            {{ statblockSignal().immunities.join(", ") }}
+          </p>
+        }
+        @if (statblockSignal().senses?.length) {
+          <p>
+            <span class="font-bold text-white">Senses:</span>
+            {{ statblockSignal().senses }}
+          </p>
+        }
+
         @if (statblockSignal().languages?.length) {
           <p>
             <span class="font-bold text-white">Languages:</span>
