@@ -5,11 +5,9 @@ import { IStatBlock } from 'src/model/interfaces/statblock.interface';
 export class StatblockService {
   private selectedStatblock = signal<IStatBlock>({} as IStatBlock);
 
+  public readonly selectedStatblock$ = this.selectedStatblock.asReadonly();
+
   setSelectedStatBlock(statBlock: IStatBlock): void {
     this.selectedStatblock.set(statBlock);
-  }
-
-  getSelectedStatblock(): IStatBlock {
-    return this.selectedStatblock();
   }
 }

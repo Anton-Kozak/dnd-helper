@@ -1,30 +1,65 @@
+// .stat-block {
+//   height: 100%;
+//   width: 100%;
+//   padding: 1rem;
+//   border-radius: 5%;
+//   border: 1px solid maroon;
+
+//   &__title {
+//     font-size: 20px;
+//   }
+
+//   &__body {
+//     &-subtitle {
+//       display: inline;
+//       font-size: 14px;
+//     }
+
+//     &-values {
+//       display: grid;
+//       grid-template-columns: auto auto;
+//       grid-template-rows: auto auto auto;
+//     }
+
+//     &-stats {
+//       display: grid;
+//       grid-template-columns: auto auto auto;
+//       grid-template-rows: auto auto;
+//     }
+//   }
+// }
+
+/* Provide a dark background for the component to live on,
+      similar to your app's likely theme.
+    */
+:host {
+  display: block;
+  padding: 2rem;
+  background-color: #111827; /* bg-gray-900 */
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+/* Custom styles for the stat block to match the image's feel.
+      The rounded corners and border are key.
+    */
 .stat-block {
-  height: 100%;
-  width: 100%;
-  padding: 1rem;
-  border-radius: 5%;
-  border: 1px solid maroon;
+  border: 2px solid #374151; /* border-gray-700 */
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
 
-  &__title {
-    font-size: 20px;
-  }
+/* Mimic the serif/script font from the image for titles.
+      Using a common fallback.
+    */
+.font-serif {
+  font-family: "Georgia", "Times New Roman", Times, serif;
+}
 
-  &__body {
-    &-subtitle {
-      display: inline;
-      font-size: 14px;
-    }
-
-    &-values {
-      display: grid;
-      grid-template-columns: auto auto;
-      grid-template-rows: auto auto auto;
-    }
-
-    &-stats {
-      display: grid;
-      grid-template-columns: auto auto auto;
-      grid-template-rows: auto auto;
-    }
-  }
+/* Ensure mat-divider has the right color in our dark theme.
+      We also use Tailwind's border-gray-700 in the template.
+    */
+mat-divider {
+  border-top-color: #374151; /* border-gray-700 */
 }

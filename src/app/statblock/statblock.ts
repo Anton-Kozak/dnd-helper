@@ -1,62 +1,57 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnInit,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { IStatBlock } from 'src/model/interfaces/statblock.interface';
 import { StatblockService } from '../services/stat-block.service';
-import { Language } from 'src/model/types/statblock.type';
 import { ModificatorBonusPipe } from '../shared/pipes/modificator-bonus-pipe/modificator-bonus-pipe';
+import { MatDividerModule } from '@angular/material/divider';
+import { KeyValuePipe } from '@angular/common';
+import { InitiativeService } from '../services/initiative.service';
+import { mapStatblockToCombatant } from 'src/util/statBlockMapper.util';
 
 @Component({
   selector: 'app-statblock',
-  imports: [MatCardModule, MatChipsModule, ModificatorBonusPipe],
+  imports: [
+    MatCardModule,
+    MatChipsModule,
+    ModificatorBonusPipe,
+    MatDividerModule,
+    KeyValuePipe,
+  ],
   templateUrl: './statblock.html',
   styleUrl: './statblock.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Statblock implements OnInit {
-  // statblock: IStatBlock = {} as IStatBlock;
+  private statblockService = inject(StatblockService);
+  private initiativeService = inject(InitiativeService);
 
-  // get statBlockInputValue() {
-  //   return this.statblock();
-  // }
+  protected statblockSignal = this.statblockService.selectedStatblock$;
 
-  // get creatureName(): string {
-  //   return this.statBlockInputValue?.name || 'N/A';
-  // }
-
-  get actionTags(): string[] | undefined {
-    return this.statBlock?.actionTags;
-  }
-
-  get statBlock(): IStatBlock {
-    return this.statblockService.getSelectedStatblock();
-  }
-
-  get resistances(): string[] {
-    return this.statBlock?.resistances;
-  }
+  protected dexValueSignal = computed(
+    () =>
+      this.statblockSignal().stats.find((stat) => stat.name === 'dex')?.value ||
+      0,
+  );
 
   get skills(): [string, string][] {
-    return Object.entries(this.statBlock?.skill);
+    return Object.entries(this.statblockSignal()?.skill);
   }
-
-  get languages(): Language[] {
-    return this.statBlock?.languages;
-  }
-
-  get senses(): string[] {
-    return this.statBlock?.senses;
-  }
-
-  private statblockService = inject(StatblockService);
 
   ngOnInit(): void {
-    console.log('selected stat block', this.statBlock);
-    // this.statblock = this.statblockService.getSelectedStatblock();
+    console.log('init stat block');
+  }
+
+  addToInit(): void {
+    const combatantFromStatblock = mapStatblockToCombatant(
+      this.statblockSignal(),
+    );
+
+    this.initiativeService.addNewCombatant(combatantFromStatblock);
   }
 }

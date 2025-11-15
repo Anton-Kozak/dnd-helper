@@ -1,0 +1,90 @@
+@if (combatants$().length) {
+  <mat-card
+    class="initiative-tracker bg-gray-900 text-gray-200 rounded-lg shadow-xl max-w-2xl mx-auto font-sans border border-gray-700 p-4"
+  >
+    <h2 class="text-2xl font-bold font-serif italic text-white mb-4 px-2">
+      Initiative Order
+    </h2>
+    <button (click)="rollInitiative()">Roll initiative</button>
+
+    <mat-list role="list" [disableRipple]="true">
+      @for (combatant of combatants$(); track combatant.id) {
+        <mat-list-item
+          role="listitem"
+          class="combatant-row mb-2 rounded-lg bg-gray-800 border border-gray-700 shadow-sm"
+          [class.active-turn]="combatant.isActive"
+          (click)="setActive(combatant.id)"
+        >
+          <div class="flex justify-between items-center w-full h-full p-3">
+            <div class="flex items-center gap-4 md:gap-6 text-sm md:text-base">
+              <div class="flex-shrink-0 w-8 text-center">
+                <span class="font-bold text-xl text-white">{{
+                  combatant.initiative
+                }}</span>
+              </div>
+
+              <div class="flex-shrink-0 w-32 md:w-48">
+                <span class="font-semibold text-gray-100 truncate">{{
+                  combatant.name
+                }}</span>
+              </div>
+
+              <div class="flex-shrink-0 w-12 text-center">
+                <span class="text-gray-400">AC</span>
+                <span class="font-medium text-gray-200 block">{{
+                  combatant.ac
+                }}</span>
+              </div>
+
+              <div class="flex-shrink-0 w-24 text-center">
+                <span class="text-gray-400">HP</span>
+                <span class="font-medium text-gray-200 block">
+                  {{ combatant.currentHp }} / {{ combatant.hp }}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-1">
+              <button
+                mat-icon-button
+                class="action-button damage"
+                aria-label="Apply damage"
+                (click)="onDamage(combatant.id, combatant.currentHp, $event)"
+              >
+                <mat-icon>remove_circle_outline</mat-icon>
+              </button>
+
+              <button
+                mat-icon-button
+                class="action-button heal"
+                aria-label="Apply healing"
+                (click)="onHeal(combatant.id, $event)"
+              >
+                <mat-icon>add_circle_outline</mat-icon>
+              </button>
+
+              <button
+                mat-icon-button
+                class="action-button kill"
+                aria-label="Remove from combat"
+                (click)="onKill(combatant.id, $event)"
+              >
+                <mat-icon>highlight_off</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-list-item>
+      }
+    </mat-list>
+
+    <button
+      mat-flat-button
+      color="primary"
+      class="w-full mt-4"
+      (click)="nextTurn()"
+    >
+      Next Turn
+      <mat-icon class="ml-2">arrow_forward</mat-icon>
+    </button>
+  </mat-card>
+}

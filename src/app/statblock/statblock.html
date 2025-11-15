@@ -1,115 +1,169 @@
-<!-- <mat-card class="example-card" appearance="outlined">
-  <mat-card-header>
-    <mat-card-title>{{ statBlock.name }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p>{{ statBlock.name }}</p>
-  </mat-card-content>
-  <mat-card-footer class="example-card-footer">
-    <mat-chip-set aria-label="Chihuahua traits">
-      @for (actionTag of actionTags; track $index) {
-        <mat-chip>{{ actionTag }}</mat-chip>
-      }
-    </mat-chip-set>
-  </mat-card-footer>
-</mat-card> -->
+@if (statblockSignal().name) {
+  <mat-card
+    class="stat-block bg-gray-900 text-gray-200 rounded-lg shadow-xl max-w-lg mx-auto font-sans border border-gray-700"
+  >
+    <!-- Header: Name, Meta, and CR -->
+    <header class="flex justify-between items-start p-6">
+      <div>
+        <!-- Name (using a serif font for style) -->
+        <h1 class="text-3xl font-bold font-serif italic text-white mb-1">
+          {{ statblockSignal().name }}
+        </h1>
+        <!-- Meta (size, type, alignment) -->
+        <p class="text-sm text-gray-400 italic">
+          {{ statblockSignal().size }}, {{ statblockSignal().type }}
+        </p>
+      </div>
+      <!-- CR (Challenge Rating) -->
+      <div class="text-right flex-shrink-0 ml-4">
+        <h2 class="text-lg font-bold text-gray-400">CR</h2>
+        <p class="text-2xl font-bold text-white">{{ statblockSignal().cr }}</p>
+        <button (click)="addToInit()">add to init</button>
+      </div>
+    </header>
 
-<!-- custom statblock template -->
-@if (statBlock.name) {
-  <div class="stat-block">
-    <div class="stat-block__title"></div>
-    <div class="stat-block__body">
-      <div class="stat-block__body-subtitle">
-        <span class="stat-block__body-subtitle--text"
-          >Size: {{ statBlock.size }}</span
-        >
-        <span class="stat-block__body-subtitle--text"
-          >Type: {{ statBlock.type }}</span
-        >
-        <span class="stat-block__body-subtitle--text">Alignment: N/A</span>
-      </div>
-      <!-- this should be grid -->
-      <div class="stat-block__body-values">
-        <span class="stat-block__body-values--text"
-          >AC: {{ statBlock.ac }}</span
-        >
-        <span class="stat-block__body-values--text"
-          >HP: {{ statBlock.hp }}</span
-        >
-        <span class="stat-block__body-values--text"
-          >Speed: {{ statBlock.speed }}</span
-        >
-        <span class="stat-block__body-values--text">Initiative: N/A</span>
-      </div>
-      <!-- this should be grid -->
-      <div class="stat-block__body-stats">
-        <div class="stat-block__body-stats--stat-line">
-          <span>Str</span> <span>{{ statBlock.stats.str }}</span>
-          <span>Mod: {{ statBlock.stats.str | modificatorBonus }}</span>
-          <span>Save: {{ statBlock.save.str }}</span>
+    <mat-divider class="border-gray-700" />
+
+    <!-- Top Stats: AC, HP, Speed, Initiative -->
+    <div class="p-6">
+      <div class="flex justify-between items-start mb-4 text-gray-300">
+        <!-- Left side stats -->
+        <div class="space-y-1">
+          <p>
+            <span class="font-bold text-white">Armor Class</span>
+            {{ statblockSignal().ac }}
+          </p>
+          <p>
+            <span class="font-bold text-white">Hit Points</span>
+            {{ statblockSignal().hp }}
+          </p>
+          <p>
+            <span class="font-bold text-white">Speed</span>
+            @for (
+              speed of statblockSignal().speed | keyvalue;
+              track speed.key
+            ) {
+              {{ speed.key }}:
+              {{ speed.value }}
+            }
+          </p>
         </div>
-        <div class="stat-block__body-stats--stat-line">
-          <span>Con</span> <span>{{ statBlock.stats.con }}</span>
-          <span>{{ statBlock.stats.con }}</span>
-          <span>{{ statBlock.save.con }}</span>
-        </div>
-        <div class="stat-block__body-stats--stat-line">
-          <span>Dex</span> <span>{{ statBlock.stats.dex }}</span>
-          <span>{{ statBlock.stats.dex | modificatorBonus }}</span>
-          <span>{{ statBlock.save.dex }}</span>
-        </div>
-        <div class="stat-block__body-stats--stat-line">
-          <span>Wis</span> <span>{{ statBlock.stats.wis }}</span>
-          <span>{{ statBlock.stats.wis | modificatorBonus }}</span>
-          <span>{{ statBlock.save.wis }}</span>
-        </div>
-        <div class="stat-block__body-stats--stat-line">
-          <span>Int</span> <span>{{ statBlock.stats.int }}</span>
-          <span>{{ statBlock.stats.int | modificatorBonus }}</span>
-          <span>{{ statBlock.save.int }}</span>
-        </div>
-        <div class="stat-block__body-stats--stat-line">
-          <span>Cha</span> <span>{{ statBlock.stats.cha }}</span>
-          <span>{{ statBlock.stats.cha | modificatorBonus }}</span>
-          <span>{{ statBlock.save.cha }}</span>
+        <!-- Right side stats (Initiative) -->
+        <div class="text-right">
+          <p class="font-bold text-white">Initiative bonus</p>
+          <p>{{ dexValueSignal() | modificatorBonus }}</p>
         </div>
       </div>
-      <div class="stat-block__body-abilities">
-        <div class="stat-blick__body-abilities--text">
-          @if (skills) {
-            <div class="stat-blick__body-abilities--text">
-              Skills: {{ skills.join(", ") }}
+
+      <mat-divider class="border-gray-700" />
+      <div class="grid grid-cols-3 gap-2 text-center py-4">
+        @for (score of statblockSignal().stats; track score.name) {
+          <div class="bg-gray-800 p-2 rounded-md border border-gray-700">
+            <div class="font-bold text-lg text-white">
+              {{ score.name.toUpperCase() }} ({{ score.value }})
             </div>
-          }
-        </div>
-        @if (resistances) {
-          <div class="stat-blick__body-abilities--text">
-            Resistances: {{ resistances.join(", ") }}
+            <div class="text-xl text-gray-300">
+              {{ score.value | modificatorBonus }}
+            </div>
+            <div class="text-xs text-gray-400">
+              Save:
+              {{ score.save || +score.value | modificatorBonus }}
+            </div>
           </div>
         }
-        <div class="stat-blick__body-abilities--text">
-          @if (languages) {
-            <div class="stat-blick__body-abilities--text">
-              Languages: {{ languages.join(", ") }}
-            </div>
-          }
-        </div>
-        <div class="stat-blick__body-abilities--text">
-          @if (senses) {
-            <div class="stat-blick__body-abilities--text">
-              Senses: {{ senses.join(", ") }}
-            </div>
-          }
-        </div>
+      </div>
+
+      <mat-divider class="border-gray-700" />
+
+      <!-- Skills, Senses, Languages, etc. -->
+      <div class="py-4 space-y-1 text-sm text-gray-300">
+        @if (statblockSignal().skill) {
+        <p>
+          <span class="font-bold text-white">Skills:</span>
+          {{ skills.join(", ") }}
+        </p>
+      }
+        @if (statblockSignal().resistances?.length) {
+          <p>
+            <span class="font-bold text-white">Damage Resistances:</span>
+            {{ statblockSignal().resistances.join(", ") }}
+          </p>
+        }
+        <p>
+          <span class="font-bold text-white">Senses:</span>
+          {{ statblockSignal().senses }}
+        </p>
+        @if (statblockSignal().languages?.length) {
+          <p>
+            <span class="font-bold text-white">Languages:</span>
+            {{ statblockSignal().languages.join(", ") }}
+          </p>
+        }
       </div>
     </div>
-    <div class="stat-block__features"></div>
-    <div class="stat-block__footer">
-      <mat-chip-set aria-label="Chihuahua traits">
-        @for (actionTag of actionTags; track $index) {
-          <mat-chip>{{ actionTag }}</mat-chip>
-        }
-      </mat-chip-set>
+    <div class="px-6 pb-6 space-y-4">
+      <!-- Traits -->
+      @if (statblockSignal().trait?.length) {
+        <section>
+          <h3
+            class="text-2xl font-bold font-serif italic text-white border-b border-gray-700 pb-1 mb-2"
+          >
+            Traits
+          </h3>
+          <div class="space-y-3 text-gray-300 text-sm">
+            @for (trait of statblockSignal().trait; track trait.name) {
+              <p>
+                <span class="font-bold italic text-gray-100"
+                  >{{ trait.name }}.</span
+                >
+                {{ trait.entries.join(" ") }}
+              </p>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Actions -->
+      @if (statblockSignal().action?.length) {
+        <section>
+          <h3
+            class="text-2xl font-bold font-serif italic text-white border-b border-gray-700 pb-1 mb-2"
+          >
+            Actions
+          </h3>
+          <div class="space-y-3 text-gray-300 text-sm">
+            @for (action of statblockSignal().action; track action.name) {
+              <p>
+                <span class="font-bold italic text-gray-100"
+                  >{{ action.name }}.</span
+                >
+                {{ action.entries.join(" ") }}
+              </p>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Reactions -->
+      <!-- @if (statblockSignal().reactions.length > 0) {
+      <section>
+        <h3
+          class="text-2xl font-bold font-serif italic text-white border-b border-gray-700 pb-1 mb-2"
+        >
+          Reactions
+        </h3>
+        <div class="space-y-3 text-gray-300 text-sm">
+          @for (reaction of statblockSignal().reactions; track reaction.name) {
+            <p>
+              <span class="font-bold italic text-gray-100"
+                >{{ reaction.name }}.</span
+              >
+              {{ reaction.description }}
+            </p>
+          }
+        </div>
+      </section>
+    } -->
     </div>
-  </div>
+  </mat-card>
 }

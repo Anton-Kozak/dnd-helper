@@ -1,11 +1,9 @@
 import {
   DamageType,
-  Language,
-  SaveThrows,
   SizesFull,
   Skill,
   SpeedInfo,
-  Stats,
+  Stat,
 } from '../types/statblock.type';
 
 export interface IStatBlock {
@@ -13,15 +11,14 @@ export interface IStatBlock {
   hp: number;
   ac: number;
   speed: Partial<SpeedInfo>;
-  stats: Stats;
-  save: SaveThrows;
+  stats: MappedStat[];
   resistances: DamageType[];
   immunities: DamageType[];
-  languages: Language[];
+  languages: string[];
   cr: string;
-  trait: IBaseAction;
-  legendary: IBaseAction;
-  action: IBaseAction;
+  trait: IBaseAction[];
+  legendary: IBaseAction[];
+  action: IBaseAction[];
   actionTags: string[];
   skill: Skill;
   senses: string[];
@@ -39,4 +36,10 @@ export interface ISkills {
 export interface IBaseAction {
   name: string;
   entries: string[];
+}
+
+export interface MappedStat {
+  name: Stat;
+  value: number;
+  save: string | undefined;
 }

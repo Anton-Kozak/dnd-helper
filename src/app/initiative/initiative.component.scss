@@ -1,0 +1,91 @@
+/* Provide a dark background for the component to live on */
+:host {
+  display: block;
+  padding: 2rem;
+  background-color: #111827; /* bg-gray-900 */
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+/* Mimic the serif/script font from the statblock for titles */
+.font-serif {
+  font-family: "Georgia", "Times New Roman", Times, serif;
+}
+
+/* Custom styling for the combatant row.
+  We remove default padding from mat-list-item.
+*/
+.combatant-row {
+  height: auto !important;
+  transition: all 0.2s ease-in-out;
+}
+
+/* This is the key style for highlighting the active turn.
+  It adds a bright border and slight shadow, making it pop.
+*/
+.combatant-row.active-turn {
+  border-color: #60a5fa; /* blue-400 */
+  box-shadow: 0 0 15px rgba(96, 165, 250, 0.3);
+}
+
+/* Remove the default focus/hover backgrounds from mat-list-item 
+  to use our own styles.
+*/
+.mat-mdc-list-item-hover-overlay,
+.mat-mdc-list-item-focus-overlay {
+  display: none !important;
+}
+
+/*
+  Custom styles for the action buttons based on your image.
+*/
+.action-button {
+  border: 2px solid transparent;
+  border-radius: 8px; /* Slightly rounded squares */
+  transition: all 0.2s ease-in-out;
+}
+
+/* Damage Button - Orange */
+.action-button.damage {
+  color: #f97316; /* text-orange-500 */
+  border-color: #f97316;
+}
+.action-button.damage:hover {
+  background-color: rgba(249, 115, 22, 0.1);
+}
+
+/* Heal Button - Green */
+.action-button.heal {
+  color: #22c55e; /* text-green-500 */
+  border-color: #22c55e;
+}
+.action-button.heal:hover {
+  background-color: rgba(34, 197, 94, 0.1);
+}
+
+/* Kill Button - Blue */
+.action-button.kill {
+  color: #3b82f6; /* text-blue-500 */
+  border-color: #3b82f6;
+}
+.action-button.kill:hover {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Ensure mat-list-item content area is full height */
+::ng-deep .mat-mdc-list-item-unscoped-content {
+  height: 100%;
+  width: 100%;
+  padding: 0 !important;
+}
+
+/* Ensure the mat-card has no internal padding so our list can be full-width */
+.mat-mdc-card-content {
+  padding: 0;
+}
+
+/* Style for the "Next Turn" button */
+.mat-mdc-flat-button.mat-primary {
+  background-color: #3b82f6; /* bg-blue-600 */
+  color: white;
+}

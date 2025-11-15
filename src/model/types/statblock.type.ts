@@ -1,10 +1,11 @@
 export type Stats = {
-  [StatSave in Stat]: number;
+  [S in Stat]: number;
 };
 
 export type SaveThrows = {
-  [StatSave in Stat]: string;
+  [SS in Stat]?: string;
 };
+
 
 export type DamageType = 'necrotic' | 'radiant' | 'posion' | 'acid';
 export type SpeedType = 'walk' | 'burrow' | 'fly' | 'swim';

@@ -21,9 +21,7 @@ import { statblockMapper } from 'src/util/statBlockMapper.util';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutocompleteSearch implements OnInit {
-  enteredValue = null;
   searchResults = signal<any[]>([]);
-
   myControl: FormControl = new FormControl('');
 
   private statblockService = inject(StatblockService);
@@ -50,7 +48,6 @@ export class AutocompleteSearch implements OnInit {
       MonsterInfo.monster.filter((monster) => {
         return monster.name.toLowerCase().includes(subStr);
       }),
-      // .map((monster) => monster.name),
     );
   }
 }
