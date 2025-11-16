@@ -126,7 +126,8 @@ export const mapStatblockToCombatant = (sb: IStatBlock): Combatant => {
     displayName: sb.displayName,
     currentHp: sb.hp,
     ac: sb.ac,
-    isActive: false,
+    isActiveTurn: false,
+    isStatblockSelected: false,
     status: 'active',
     initBonus: Math.floor(
       ((sb.stats.find((s) => s.name === 'dex')?.value || 10) - 10) / 2,

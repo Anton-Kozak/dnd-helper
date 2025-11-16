@@ -28,6 +28,11 @@
   box-shadow: 0 0 15px rgba(96, 165, 250, 0.3);
 }
 
+.combatant-row.selected {
+  border-color: #60fa68; /* blue-400 */
+  box-shadow: 0 0 15px rgba(96, 250, 109, 0.3);
+}
+
 /* Remove the default focus/hover backgrounds from mat-list-item 
   to use our own styles.
 */
@@ -88,4 +93,9 @@
 .mat-mdc-flat-button.mat-primary {
   background-color: #3b82f6; /* bg-blue-600 */
   color: white;
+}
+
+
+.initiative-field {
+  width: inherit;
 }

@@ -11,10 +11,16 @@ export class InitiativeService {
     this.combatantsSignal.set(combatants);
   }
 
-  updateActiveStatus(id: string): void {
+  updateSelectedStatuses(id: string, isSelectedByTurn = false): void {
     this.combatantsSignal.update((currentCombatants) => {
       return currentCombatants.map((c) =>
-        c.id === id ? { ...c, isActive: true } : { ...c, isActive: false },
+        c.id === id
+          ? {
+              ...c,
+              isStatblockSelected: true,
+              isActiveTurn: isSelectedByTurn ? true : c.isActiveTurn,
+            }
+          : { ...c, isStatblockSelected: false, isActiveTurn: false },
       );
     });
   }
@@ -31,11 +37,42 @@ export class InitiativeService {
     });
   }
 
+  updateCombatantsInBulk<K extends keyof Combatant>(
+    key: K,
+    value: Combatant[K],
+  ): void {
+    this.combatantsSignal.update((currentCombatants) => {
+      return currentCombatants.map((c) => ({ ...c, [key]: value }));
+    });
+  }
+
+  updateCombatantsInitiative(): void {
+    // add sorting
+    this.combatantsSignal.update((cc) => {
+      return cc
+        .map((c) => {
+          const roll = Math.floor(Math.random() * 20) + 1;
+          const initiative = roll + c.initBonus;
+
+          return {
+            ...c,
+            initiative,
+          };
+        })
+        .sort((a, b) => b.initiative - a.initiative);
+    });
+  }
+
   addNewCombatant(combatant: Combatant): void {
     let combatantToAdd = combatant;
-    const existingCombatants = this.combatantsSignal().filter((c) => c.name === combatant.name);
+    const existingCombatants = this.combatantsSignal().filter(
+      (c) => c.name === combatant.name,
+    );
     if (existingCombatants.length) {
-      combatantToAdd = { ...combatant, displayName: `${combatant.displayName}_${existingCombatants.length}` };
+      combatantToAdd = {
+        ...combatant,
+        displayName: `${combatant.displayName}_${existingCombatants.length}`,
+      };
     }
 
     this.combatantsSignal.update((currentCombatants) => [

@@ -8,6 +8,7 @@ export interface Combatant {
   initBonus: number;
   initiative: number;
   type: 'player' | 'monster' | 'npc';
-  isActive: boolean;
+  isActiveTurn: boolean;
+  isStatblockSelected: boolean;
   status: 'active' | 'dead' | 'incapaciated';
 }
