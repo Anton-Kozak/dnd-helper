@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AutocompleteSearch } from '../shared/autocomplete-search/autocomplete-search';
-import { Statblock } from '../statblock/statblock';
+import { AutocompleteSearch } from 'src/app/shared/autocomplete-search/autocomplete-search';
 import { InitiativeComponent } from '../initiative/initiative.component';
+import { Statblock } from '../statblock/statblock';
 
 @Component({
   selector: 'app-5e-place',

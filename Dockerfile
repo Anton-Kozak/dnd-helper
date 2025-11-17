@@ -16,6 +16,4 @@ FROM nginx:1.23-alpine
 
 COPY --from=builder /app/dist/dnd-helper/browser /usr/share/nginx/html
 
-RUN ls -laR /usr/share/nginx/html
-
 EXPOSE 80

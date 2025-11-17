@@ -8,6 +8,9 @@
     @if (!hasBattleStarted) {
       <button (click)="rollInitiative()">Roll initiative</button>
       <button (click)="startBattle()">Start battle</button>
+      <!-- <button (click)="openModal()">Open modal</button> -->
+      <button (click)="addNewCombatant()">Add Combatant</button>
+
     }
     <mat-list role="list" [disableRipple]="true">
       @for (combatant of combatants$(); track combatant.id) {
@@ -25,7 +28,9 @@
             <div class="flex items-center gap-4 md:gap-6 text-sm md:text-base">
               <div class="flex-shrink-0 w-8 text-center">
                 <input
-                  (focusout)="editInitiative(initiativeControl.value, combatant)"
+                  (focusout)="
+                    editInitiative(initiativeControl.value, combatant)
+                  "
                   class="font-bold text-xl text-white initiative-field"
                   [formControl]="initiativeControl"
                   type="number"
@@ -113,3 +118,7 @@
     </button>
   }
 </mat-card>
+
+<ng-template #testTemplate>
+  <div><span>hello world</span></div>
+</ng-template>

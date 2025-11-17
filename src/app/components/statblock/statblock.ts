@@ -7,22 +7,22 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { StatblockService } from '../services/stat-block.service';
-import { ModificatorBonusPipe } from '../shared/pipes/modificator-bonus-pipe/modificator-bonus-pipe';
 import { MatDividerModule } from '@angular/material/divider';
 import { KeyValuePipe } from '@angular/common';
-import { InitiativeService } from '../services/initiative.service';
 import { mapStatblockToCombatant } from 'src/util/statBlockMapper.util';
-import { CombatantCacheService } from '../services/combatant-cache.service';
+import { CombatantCacheService } from 'src/app/services/combatant-cache.service';
+import { InitiativeService } from 'src/app/services/initiative.service';
+import { StatblockService } from 'src/app/services/stat-block.service';
+import { ModificatorBonusPipe } from 'src/app/shared/pipes/modificator-bonus-pipe/modificator-bonus-pipe';
 
 @Component({
   selector: 'app-statblock',
   imports: [
     MatCardModule,
     MatChipsModule,
-    ModificatorBonusPipe,
     MatDividerModule,
     KeyValuePipe,
+    ModificatorBonusPipe,
   ],
   templateUrl: './statblock.html',
   styleUrl: './statblock.scss',

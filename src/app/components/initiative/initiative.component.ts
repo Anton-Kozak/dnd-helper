@@ -1,15 +1,24 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  TemplateRef,
+  viewChild,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { InitiativeService } from '../services/initiative.service';
-import { CombatantCacheService } from '../services/combatant-cache.service';
+import { InitiativeService } from '../../services/initiative.service';
+import { CombatantCacheService } from '../../services/combatant-cache.service';
 import { IStatBlock } from 'src/model/interfaces/statblock.interface';
-import { StatblockService } from '../services/stat-block.service';
+import { StatblockService } from '../../services/stat-block.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Combatant } from 'src/model/interfaces/combatant.interface';
+import { ModalComponent } from '../../shared/modal/modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateCustomCombatantComponent } from '../modals/create-custom-combatant/create-custom-combatant.component';
 
 @Component({
   selector: 'app-initiative',
@@ -20,6 +29,7 @@ import { Combatant } from 'src/model/interfaces/combatant.interface';
     MatButtonModule,
     MatDividerModule,
     ReactiveFormsModule,
+    CreateCustomCombatantComponent,
   ],
   templateUrl: './initiative.component.html',
   styleUrl: './initiative.component.scss',
@@ -29,6 +39,9 @@ export class InitiativeComponent {
   private initiativeService = inject(InitiativeService);
   private combatantCacheService = inject(CombatantCacheService);
   private statblockService = inject(StatblockService);
+  private dialog = inject(MatDialog);
+
+  testTemplate = viewChild('testTemplate', { read: TemplateRef });
 
   initiativeControl: FormControl = new FormControl(0);
 
@@ -136,6 +149,20 @@ export class InitiativeComponent {
       newActiveCombatant.name,
       true,
     );
+  }
+
+  openModal(): void {
+    this.dialog.open(ModalComponent, {
+      data: {
+        content: 'test',
+        projectedContent: this.testTemplate(),
+      },
+      width: '250px',
+    });
+  }
+
+  addNewCombatant(): void {
+    this.dialog.open(CreateCustomCombatantComponent);
   }
 
   rollInitiative(): void {

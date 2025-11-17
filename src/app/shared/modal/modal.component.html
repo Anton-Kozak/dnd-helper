@@ -1,0 +1,14 @@
+<div class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>{{ title() || "Modal Title" }}</h2>
+      <button (click)="close()">X</button>
+    </div>
+    <div class="modal-body">
+      <ng-content select=".modal-body" />
+    </div>
+    <div class="modal-footer">
+      <ng-content select=".modal-footer"></ng-content>
+    </div>
+  </div>
+</div>

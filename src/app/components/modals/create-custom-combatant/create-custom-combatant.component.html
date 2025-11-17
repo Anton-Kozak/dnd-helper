@@ -1,0 +1,32 @@
+<app-modal
+  [title]="'Create new combatant'"
+  [isSubmitDisabled]="!customCombatantGroup.valid"
+  class="w-48"
+>
+  <form [formGroup]="customCombatantGroup" class="modal-body">
+    <mat-form-field class="example-full-width">
+      <mat-label for="name">Name</mat-label>
+      <input matInput id="name" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label for="health">Health</mat-label>
+      <input matInput id="health" type="number" formControlName="hp" />
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width">
+      <mat-label for="ac">AC</mat-label>
+      <input matInput id="ac" type="number" formControlName="ac" />
+    </mat-form-field>
+  </form>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      (click)="submitCombatant()"
+      [disabled]="!customCombatantGroup.valid"
+    >
+      Create Combatant
+    </button>
+  </div>
+</app-modal>
