@@ -2,9 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  InjectionToken,
   input,
 } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 
 export interface ModalButton {
   type: 'close' | 'submit';
@@ -16,8 +17,12 @@ export interface ModalConfig {
   title: string;
   closeButton: ModalButton;
   submitButton: ModalButton;
-  optionalData?: unknown;
+  optionalData?: { [key: string]: string };
 }
+
+export const ModalConfigToken = new InjectionToken<ModalConfig>(
+  'Modal config token',
+);
 
 @Component({
   selector: 'app-modal',
@@ -27,17 +32,10 @@ export interface ModalConfig {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalComponent {
-  private data = inject(MAT_DIALOG_DATA);
   isSubmitDisabled = input(false);
   title = input('');
 
-
-  get configData(): ModalConfig {
-    return this.data;
-  }
-
   readonly dialogRef = inject(MatDialogRef<ModalComponent>);
-
 
   close() {
     this.dialogRef.close();

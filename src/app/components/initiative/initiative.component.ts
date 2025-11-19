@@ -16,9 +16,13 @@ import { IStatBlock } from 'src/model/interfaces/statblock.interface';
 import { StatblockService } from '../../services/stat-block.service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Combatant } from 'src/model/interfaces/combatant.interface';
-import { ModalComponent } from '../../shared/modal/modal.component';
+import {
+  ModalComponent,
+  ModalConfig,
+} from '../../shared/modal/modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateCustomCombatantComponent } from '../modals/create-custom-combatant/create-custom-combatant.component';
+import { ChangeHpModal } from '../modals/change-hp-modal/change-hp-modal';
 
 @Component({
   selector: 'app-initiative',
@@ -30,6 +34,7 @@ import { CreateCustomCombatantComponent } from '../modals/create-custom-combatan
     MatDividerModule,
     ReactiveFormsModule,
     CreateCustomCombatantComponent,
+    ChangeHpModal,
   ],
   templateUrl: './initiative.component.html',
   styleUrl: './initiative.component.scss',
@@ -92,6 +97,10 @@ export class InitiativeComponent {
 
   onHeal(id: string, event: Event): void {
     this.stopPropagation(event);
+    this.dialog.open<ChangeHpModal, ModalConfig>(ChangeHpModal, {
+      optionalData: { changeType: 'heal', id: id },
+    });
+
     console.log('on heal pressed');
   }
 
@@ -149,16 +158,6 @@ export class InitiativeComponent {
       newActiveCombatant.name,
       true,
     );
-  }
-
-  openModal(): void {
-    this.dialog.open(ModalComponent, {
-      data: {
-        content: 'test',
-        projectedContent: this.testTemplate(),
-      },
-      width: '250px',
-    });
   }
 
   addNewCombatant(): void {
