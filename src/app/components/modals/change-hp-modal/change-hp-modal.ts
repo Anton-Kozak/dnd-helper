@@ -6,25 +6,27 @@ import {
 } from '@angular/core';
 import {
   ModalComponent,
-  ModalConfigToken,
+  ModalConfig,
 } from 'src/app/shared/modal/modal.component';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InitiativeService } from 'src/app/services/initiative.service';
-
-type ChangeType = 'heal' | 'damage';
-
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Combatant } from 'src/model/interfaces/combatant.interface';
+import { HpChangeType } from 'src/model/types/statblock.type';
+import { MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-change-hp-modal',
-  imports: [ModalComponent, ReactiveFormsModule],
+  imports: [ModalComponent, ReactiveFormsModule, MatButtonModule],
   templateUrl: './change-hp-modal.html',
   styleUrl: './change-hp-modal.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChangeHpModal implements OnInit {
-  private data = inject(ModalConfigToken);
+export class ChangeHpModalComponent implements OnInit {
+  private data = inject<ModalConfig>(MAT_DIALOG_DATA);
   private initiativeService = inject(InitiativeService);
+  private dialogRef = inject(MatDialogRef);
 
-  private changeType: ChangeType = 'damage';
+  private changeType: HpChangeType = 'damage';
 
   hpFormControl = new FormControl('');
 
@@ -32,23 +34,27 @@ export class ChangeHpModal implements OnInit {
     return this.data.title;
   }
 
+  get combatant(): Combatant {
+    return this.data.optionalData?.['combatant'];
+  }
+
   ngOnInit(): void {
     this.changeType =
-      (this.data.optionalData?.['changeType'] as ChangeType) || 'damage';
+      (this.data.optionalData?.['changeType'] as HpChangeType) || 'damage';
   }
 
   onSubmit(): void {
-    const currentCombatantId = this.data.optionalData?.['id'];
-    if (this.hpFormControl.value && currentCombatantId) {
+    const { id, currentHp, hp } = this.combatant;
+
+    if (this.hpFormControl.value && currentHp) {
       const numericValue = +this.hpFormControl.value;
       const value =
         this.changeType === 'damage' ? numericValue * -1 : numericValue;
+      const updatedValue = currentHp + value;
+      const finalValue = updatedValue > hp ? hp : updatedValue;
+      this.initiativeService.updateCombatant(id, 'currentHp', finalValue);
 
-      this.initiativeService.updateCombatant(
-        currentCombatantId,
-        'currentHp',
-        value,
-      );
+      this.dialogRef.close();
     }
   }
 }

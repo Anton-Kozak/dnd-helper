@@ -1,5 +1,14 @@
 <app-modal [title]="title">
-  <input type="number" [formControl]="hpFormControl" />
-
-  <button (click)="onSubmit()">Confirm</button>
+  <div class="modal-body">
+    <div class="container">
+      <div class="container-stats"></div>
+      <div class="container-input">
+        <div class="hp mb-4">
+          <input type="number" [formControl]="hpFormControl" /> /
+          <span>{{ combatant.hp }}</span>
+        </div>
+        <button matButton="filled" [disabled]="!hpFormControl.value" (click)="onSubmit()">Confirm</button>
+      </div>
+    </div>
+  </div>
 </app-modal>

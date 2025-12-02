@@ -20,9 +20,10 @@ import {
   ModalComponent,
   ModalConfig,
 } from '../../shared/modal/modal.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { CreateCustomCombatantComponent } from '../modals/create-custom-combatant/create-custom-combatant.component';
-import { ChangeHpModal } from '../modals/change-hp-modal/change-hp-modal';
+import { ChangeHpModalComponent } from '../modals/change-hp-modal/change-hp-modal';
+import { HpChangeType } from 'src/model/types/statblock.type';
 
 @Component({
   selector: 'app-initiative',
@@ -34,7 +35,7 @@ import { ChangeHpModal } from '../modals/change-hp-modal/change-hp-modal';
     MatDividerModule,
     ReactiveFormsModule,
     CreateCustomCombatantComponent,
-    ChangeHpModal,
+    ChangeHpModalComponent,
   ],
   templateUrl: './initiative.component.html',
   styleUrl: './initiative.component.scss',
@@ -95,13 +96,20 @@ export class InitiativeComponent {
     this.initiativeService.updateCombatant(id, 'currentHp', currentHp - 5);
   }
 
-  onHeal(id: string, event: Event): void {
+  onHpChange(
+    combatant: Combatant,
+    event: Event,
+    changeType: HpChangeType,
+  ): void {
     this.stopPropagation(event);
-    this.dialog.open<ChangeHpModal, ModalConfig>(ChangeHpModal, {
-      optionalData: { changeType: 'heal', id: id },
-    });
+    const config: MatDialogConfig<ModalConfig> = {
+      data: {
+        title: changeType === 'damage' ? 'Damage creature' : 'Heal creature',
+        optionalData: { changeType: changeType, combatant: combatant },
+      },
+    };
 
-    console.log('on heal pressed');
+    this.dialog.open(ChangeHpModalComponent, config);
   }
 
   onKill(id: string, event: Event): void {

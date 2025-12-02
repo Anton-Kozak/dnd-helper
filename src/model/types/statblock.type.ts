@@ -64,3 +64,5 @@ export const ALIGNMENT_MAPPER: AlignmentMapper = {
   E: 'Evil',
   C: 'Chaotic',
 };
+
+export type HpChangeType = 'heal' | 'damage';

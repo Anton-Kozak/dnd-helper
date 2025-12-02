@@ -15,9 +15,9 @@ export interface ModalButton {
 
 export interface ModalConfig {
   title: string;
-  closeButton: ModalButton;
-  submitButton: ModalButton;
-  optionalData?: { [key: string]: string };
+  closeButton?: ModalButton;
+  submitButton?: ModalButton;
+  optionalData?: { [key: string]: any };
 }
 
 export const ModalConfigToken = new InjectionToken<ModalConfig>(

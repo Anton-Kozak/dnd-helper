@@ -1,3 +1,27 @@
 :host {
   display: block;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+  input {
+    border: 2px solid white;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .container-input {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hp {
+    display: flex;
+    justify-content: center;
+  }
+}
